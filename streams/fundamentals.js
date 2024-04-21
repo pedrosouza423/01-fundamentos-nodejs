@@ -1,5 +1,5 @@
 
-import { Readable } from 'node:stream';
+import { Readable, Writable, Transform } from 'node:stream';
 
 class OneToOneHundred extends Readable {
     index = 1
@@ -19,4 +19,26 @@ class OneToOneHundred extends Readable {
     }
 }
 
-new OneToOneHundred().pipe(process.stdout);
+class MultiplyByTenStream extends Writable {
+    _write(chunk, encoding, callback) {
+        // const number = parseInt(chunk.toString());
+        // const result = number * 10;
+        // console.log(result);
+        // callback();
+        console.log(parseInt(chunk.toString()) * 10);
+        callback();
+    }
+}
+
+class InverseNumberStream extends Transform {
+    _transform(chunk, encoding, callback) {
+        const number = parseInt(chunk.toString());
+        const result = number * -1;
+        callback(null, Buffer.from(String(result)));
+    }
+}
+
+new OneToOneHundred()
+    .pipe(new InverseNumberStream())
+    .pipe(new MultiplyByTenStream());
+    
