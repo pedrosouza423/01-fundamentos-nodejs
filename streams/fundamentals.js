@@ -21,10 +21,6 @@ class OneToOneHundred extends Readable {
 
 class MultiplyByTenStream extends Writable {
     _write(chunk, encoding, callback) {
-        // const number = parseInt(chunk.toString());
-        // const result = number * 10;
-        // console.log(result);
-        // callback();
         console.log(parseInt(chunk.toString()) * 10);
         callback();
     }
